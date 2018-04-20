@@ -1,0 +1,19 @@
+// demo styles
+
+.container {
+	max-width: 1200px;
+	margin-right: auto;
+	margin-left: auto;
+	padding: $spaceSmall;
+}
+
+.o-grid__item {
+	margin-top: $spaceSmall;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	border: 1px solid darken(coral, 10%);
+	text-align: center;
+	background-color: coral;
+	color: white;
+	overflow: hidden;
+}

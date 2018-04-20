@@ -1,0 +1,38 @@
+// utilities
+
+// grid utilities
+
+$breakpointSizes: map-get($gridConfig, breakpoints);
+$breakpointKeys: map-keys($breakpointSizes);
+
+@for $denominator from 1 through 12 {
+	.u-1\/#{$denominator} {
+		@if $denominator == 1 {
+			@include gridItem($denominator, 0);
+		}
+
+		@else {
+			@include gridItem($denominator, $spaceSmall);
+		}
+	}
+}
+
+@each $breakpointKey in $breakpointKeys {
+	$breakpointWidth: map-get($breakpointSizes, $breakpointKey);
+
+	@for $denominator from 1 through 12 {
+		.u-1\/#{$denominator}--#{$breakpointKey} {
+			@if $denominator == 1 {
+				@media (min-width: $breakpointWidth) {
+					@include gridItem($denominator, 0);
+				}
+			}
+
+			@else {
+				@media (min-width: $breakpointWidth) {
+					@include gridItem($denominator, $spaceSmall);
+				}
+			}
+		}
+	}
+}

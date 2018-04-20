@@ -1,0 +1,44 @@
+// variables
+
+$landscape: 544px;
+$tablet: 768px;
+$desktop: 990px;
+$uber: 1200px;
+
+$gridConfig: (
+	breakpoints: (
+		landscape: $landscape,
+		tablet: $tablet,
+		desktop: $desktop,
+		uber: $uber
+	),
+	column-gutter: (
+		landscape: $spaceSmall,
+		uber: $spaceLarge
+	)
+);
+
+// mixin
+
+@mixin gridItem($columnsAmount, $guttersWidth) {
+	@if $columnsAmount == 1 {
+		width: 100%;
+	}
+	@else { // stylelint-disable-line at-rule-empty-line-before
+		// here's an example of getting a 3 column grid with the formula below:
+		// 50% - (16px * 1) / 2
+		width: calc((100% / #{$columnsAmount}) - ((#{$guttersWidth} * (#{$columnsAmount} - 1)) / #{$columnsAmount}));
+	}
+}
+
+// grid
+
+.o-grid {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+}
+
+.o-grid__item {
+	@include gridItem(1, 0);
+}

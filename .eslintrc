@@ -1,0 +1,7 @@
+{
+  "extends": "ao",
+  "env": {
+    "browser": true,
+    "node": true
+  }
+}

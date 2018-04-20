@@ -1,0 +1,42 @@
+{
+  "name": "framework",
+  "version": "0.7.5",
+  "description": "A framework for AO",
+  "main": "src/app.js",
+  "scripts": {
+    "dev": "webpack --watch",
+    "start": "npm run dev",
+    "build": "webpack"
+  },
+  "author": "James Almond",
+  "license": "ISC",
+  "devDependencies": {
+    "css-loader": "^0.28.9",
+    "cssnano": "^3.10.0",
+    "eslint": "^4.18.2",
+    "eslint-config-ao": "0.0.1-rc.3",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "node-sass": "^4.7.2",
+    "postcss": "^6.0.19",
+    "postcss-cssnext": "^3.1.0",
+    "postcss-loader": "^2.1.1",
+    "sass-loader": "^6.0.6",
+    "stylelint": "^9.1.1",
+    "stylelint-order": "^0.8.1",
+    "stylelint-preset-ao": "0.0.1-rc.2",
+    "webpack": "^3.10.0"
+  },
+  "dependencies": {
+    "@babel/core": "^7.0.0-beta.39",
+    "@babel/preset-env": "^7.0.0-beta.39",
+    "axios": "^0.18.0",
+    "babel-loader": "^8.0.0-beta.0"
+  },
+  "browserslist": [
+    "last 2 versions",
+    "ie >= 9",
+    "ios_saf >= 8",
+    "Android >= 4.3",
+    "> 1%"
+  ]
+}

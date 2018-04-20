@@ -1,1 +1,3 @@
-# framework
+# Grid
+
+A responsive grid

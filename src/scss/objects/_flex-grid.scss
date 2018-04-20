@@ -1,0 +1,169 @@
+// We shouldn't use calc because sometimes we need a single column to sit flush with it's sibling
+// This cannot be achieved with calc, because the assumption that all columns are the same width has already been made
+
+$flexgridConfig: (
+	column-total: 12,
+	row-class: row,
+	column-class: col,
+	default-gutter: $spaceSmall
+) !default;
+$flexgridBreakpoints: (
+	landscape: 544px,
+	tablet: 768px,
+	desktop: 990px,
+	uber: 1200px
+) !default;
+$flexgridGutters: (
+	landscape: $spaceTiny,
+	tablet: $spaceSmall,
+	desktop: $spaceSmall,
+	uber: $spaceSmall
+) !default;
+
+@mixin flexgrid-bp($bpValueMin, $bpValueMax: false) {
+	@if $bpValueMax {
+		@media (min-width: $bpValueMin) and (max-width: $bpValueMax) {
+			@content;
+		}
+	}
+
+	@else {
+		@media (min-width: $bpValueMin) {
+			@content;
+		}
+	}
+}
+
+@mixin flexgrid-bp-from($bpKeyMin, $bpKeyMax: false) {
+	$bpValueMin: map-get($flexgridBreakpoints, $bpKeyMin);
+	$bpValueMax: map-get($flexgridBreakpoints, $bpKeyMax);
+
+	@if $bpValueMin and $bpValueMax {
+		@include flexgrid-bp($bpValueMin, $bpValueMax) {
+			@content;
+		}
+	}
+
+	@else {
+		@include flexgrid-bp($bpValueMin) {
+			@content;
+		}
+	}
+}
+
+@mixin flexgrid-rows() {
+	$rowClass: map-get($flexgridConfig, row-class);
+	$columnClass: map-get($flexgridConfig, column-class);
+	$defaultGutter: map-get($flexgridConfig, 'default-gutter');
+
+	.#{$rowClass} {
+		display: flex;
+		flex-wrap: wrap;
+		margin-right: ($defaultGutter / -2);
+		margin-left: ($defaultGutter / -2);
+
+		@each $bpKey, $bpValue in $flexgridBreakpoints {
+			$gutterValue: if(
+				map-has-key($flexgridGutters, $bpKey),
+				map-get($flexgridGutters, $bpKey),
+				$defaultGutter
+			); // Ternary operator https://stackoverflow.com/a/43191176
+
+			@include flexgrid-bp-from($bpKey) {
+				margin-right: ($gutterValue / -2);
+				margin-left: ($gutterValue / -2);
+			}
+		}
+	}
+
+	.#{$rowClass}-gutter-none {
+		display: flex;
+		flex-wrap: wrap;
+		margin-right: 0;
+		margin-left: 0;
+
+		.#{$columnClass},
+		[class^='#{$columnClass}-'] {
+			padding-right: 0;
+			padding-left: 0;
+		}
+
+		@each $bpKey, $bpValue in $flexgridBreakpoints {
+			@include flexgrid-bp-from($bpKey) {
+				&--#{$bpKey} {
+					display: flex;
+					flex-wrap: wrap;
+					margin-right: 0;
+					margin-left: 0;
+
+					.#{$columnClass},
+					[class^='#{$columnClass}-'] {
+						padding-right: 0;
+						padding-left: 0;
+					}
+				}
+			}
+		}
+	}
+}
+
+@mixin flexgrid-columns() {
+	$columnClass: map-get($flexgridConfig, column-class);
+	$columnTotal: map-get($flexgridConfig, column-total);
+	$defaultGutter: map-get($flexgridConfig, 'default-gutter');
+
+	.#{$columnClass},
+	[class^='#{$columnClass}-'] {
+		flex: 1;
+		position: relative;
+		width: auto;
+		max-width: 100%;
+		min-height: 1px; // Prevent columns from collapsing when empty
+		margin-right: 0;
+		margin-left: 0;
+		padding-right: ($defaultGutter / 2);
+		padding-left: ($defaultGutter / 2);
+
+		@each $bpKey, $bpValue in $flexgridBreakpoints {
+			$gutterValue: if(
+				map-has-key($flexgridGutters, $bpKey),
+				map-get($flexgridGutters, $bpKey),
+				$defaultGutter
+			); // Ternary operator https://stackoverflow.com/a/43191176
+
+			@include flexgrid-bp-from($bpKey) {
+				padding-right: ($gutterValue / 2);
+				padding-left: ($gutterValue / 2);
+			}
+		}
+	}
+
+	@for $i from 1 through $columnTotal {
+		.#{$columnClass}-#{$i} {
+			flex: auto;
+			width: percentage($i / $columnTotal);
+			max-width: percentage($i / $columnTotal);
+		}
+	}
+
+	@each $bpKey, $bpValue in $flexgridBreakpoints {
+		@for $i from 1 through $columnTotal {
+			@include flexgrid-bp-from($bpKey) {
+				.#{$columnClass}-#{$i}--#{$bpKey} {
+					flex: auto;
+					width: percentage($i / $columnTotal);
+					max-width: percentage($i / $columnTotal);
+				}
+			}
+		}
+	}
+	// Auto width columns, which only have the natural width of their content
+	.#{$columnClass}-auto {
+		flex: 0 1 auto;
+		width: auto;
+		max-width: 100%;
+	}
+}
+
+@include flexgrid-rows();
+@include flexgrid-columns();
